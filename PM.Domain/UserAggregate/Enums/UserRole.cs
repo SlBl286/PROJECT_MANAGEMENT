@@ -1,13 +1,13 @@
 namespace PM.Domain.UserAggregate.Enums;
-public enum UserRole
+public enum  UserRole
 {
-    Admin,
+    Admin ,
     User
 }
 
 static class UserRoleExtensions
 {
-    public static string From(this UserRole role)
+    public static string GetStringCode(this UserRole role)
     {
         return role switch
         {

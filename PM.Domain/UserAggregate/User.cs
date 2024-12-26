@@ -1,4 +1,5 @@
 using PM.Domain.Common.Models;
+using PM.Domain.UserAggregate.Entities;
 using PM.Domain.UserAggregate.Enums;
 using PM.Domain.UserAggregate.ValueObjects;
 
@@ -6,6 +7,8 @@ namespace PM.Domain.UserAggregate;
 
 public sealed class User : AggregatetRoot<UserId, Guid>
 {
+    private readonly List<Notification> _notifications = [];
+
     public string Name { get; private set; }
     public string Username { get; private set; }
     public string? Email { get; private set; }
@@ -15,6 +18,8 @@ public sealed class User : AggregatetRoot<UserId, Guid>
     public UserRole Role { get; private set; }
     public string Salt { get; private set; }
     public RefreshToken RefreshToken { get; private set; }
+    public IReadOnlyList<Notification> Notifications => _notifications.AsReadOnly();
+
     private User(UserId id,
                  string name,
                  string username,
@@ -48,7 +53,7 @@ public sealed class User : AggregatetRoot<UserId, Guid>
                               string salt,
                               RefreshToken refreshToken)
     {
-        return new User(id, name, username, email, phoneNumber, avatar, hashedPassword,role, salt, refreshToken);
+        return new User(id, name, username, email, phoneNumber, avatar, hashedPassword, role, salt, refreshToken);
     }
 
 #pragma warning disable CS0618
