@@ -2,11 +2,12 @@ using Microsoft.OpenApi.Models;
 using PM.Application;
 using PM.Infrastrcture;
 using PM.WebApi;
+using PM.WebApi.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 {
 
-// Add services to the container.
+    // Add services to the container.
 
     builder.Services.AddPresentation()
                     .AddApplication()
@@ -43,18 +44,18 @@ var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 {
 
-// Configure the HTTP request pipeline.
-app.UseExceptionHandler("/error");
+    // Configure the HTTP request pipeline.
+    app.UseExceptionHandler("/error");
     app.UseHttpsRedirection();
-    // app.Map("/_images", b => b.UseMiddleware<ImageServeMiddleware>());
+    app.Map("/_images", b => b.UseMiddleware<ImageServeMiddleware>());
     app.UseAuthentication();
     app.UseAuthorization();
     app.MapControllers();
-    app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:5173","http://192.168.0.23:5173"));
+    app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:5173", "http://192.168.0.23:5173"));
     if (app.Environment.IsDevelopment())
     {
         app.UseSwagger();
         app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Project Management API"));
     }
-app.Run();
+    app.Run();
 }
