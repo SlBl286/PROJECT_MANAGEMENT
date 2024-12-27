@@ -32,19 +32,22 @@ public class RegisterCommandHandler :
         {
             return Errors.User.DuplicateUserName;
         }
+        var role =  UserRole.User;
+        if( await _userRepository.GetCount() == 0){
+            role = UserRole.Admin;
+        }
         var hashedPassword = _hashStringService.HashPassword(command.Password, out byte[] salt);
         //Create user (generate unique ID)
         var user = User.Create(UserId.CreateUnique(),
-                                command.FirstName,
+                                command.Name,
                                command.Username,
+                               command.Email,
                                command.PhoneNumber,
                                command.Avatar,
-                               command.Address,
                                hashedPassword,
-                               UserRole.User,
+                               role,
                                Convert.ToBase64String(salt),
                                RefreshToken.Create(DateTime.UtcNow.AddDays(7)));
-
         await _userRepository.Add(user);
         //Create JWT token
         var token = _jwtTokenGenerator.GenerateToken(user);

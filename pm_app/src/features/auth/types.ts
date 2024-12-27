@@ -1,3 +1,5 @@
+import { UserRole } from "@/enums"
+
 export type Login= {
     username : string,
     password : string,
@@ -13,9 +15,12 @@ export type Register= {
 }
 export type User= {
     id : string,
-    lastName: string,
-    firstName: string,
+    name: string,
     token : string,
     username : string,
+    email : string,
+    phoneNumber : string,
+    avatar : string,
+    role : UserRole,
     refreshToken: string,
 }

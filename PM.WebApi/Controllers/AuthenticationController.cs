@@ -19,11 +19,13 @@ public class AuthenticationController : ApiController
 {
     private readonly ISender _mediator;
     private readonly IMapper _mapper;
+    private readonly IWebHostEnvironment _env;
 
-    public AuthenticationController(IMediator mediator, IMapper mapper)
+    public AuthenticationController(IMediator mediator, IMapper mapper, IWebHostEnvironment env)
     {
         _mediator = mediator;
         _mapper = mapper;
+        _env = env;
     }
 
     [HttpPost("register")]
@@ -31,7 +33,13 @@ public class AuthenticationController : ApiController
     {
         var command = _mapper.Map<RegisterCommand>(request);
         ErrorOr<AuthenticationResult> authResult = await _mediator.Send(command);
-
+        if (!authResult.IsError && request.Avatar is not null)
+        {
+            var _tempFolder = Path.Combine(Path.Combine(_env.ContentRootPath, "Data_Stores", "salt", "temp"));
+            var _avatarFolder = Path.Combine(Path.Combine(_env.ContentRootPath, "Data_Stores", "salt", "avatar"));
+            if (System.IO.File.Exists(Path.Combine(_tempFolder, request.Avatar)))
+                System.IO.File.Move(Path.Combine(_tempFolder, request.Avatar), Path.Combine(_avatarFolder, request.Avatar));
+        }
         return authResult.Match(
             authResult => Ok(_mapper.Map<AuthenticationResponse>(authResult)),
             errors => Problem(errors: errors)
@@ -44,6 +52,7 @@ public class AuthenticationController : ApiController
     {
         var query = _mapper.Map<LoginCommand>(request);
         ErrorOr<AuthenticationResult> authResult = await _mediator.Send(query);
+
         return authResult.Match(
            authResult => Ok(_mapper.Map<AuthenticationResponse>(authResult)),
            errors => Problem(errors)

@@ -5,13 +5,11 @@ using PM.Application.Authentication.Common;
 namespace PM.Application.Authentication.Commands.Register;
 
 public record RegisterCommand(
+    string Name,
     string Username,
-    string FirstName,
-    string LastName,
+    string Password,
     string? Email,
     string? PhoneNumber,
-    DateTime Birthday,
     string? Avatar,
-    string? Address,
-    string Password
+    DateTime? BirthDay
 ) : IRequest<ErrorOr<AuthenticationResult>>;

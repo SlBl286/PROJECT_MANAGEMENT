@@ -5,13 +5,13 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 export default function MainLayout() {
 
   return (
-    <div className="flex w-screen">
+    <div className="w-screen">
 
-        <ScrollArea className="">
+        {/* <ScrollArea className=""> */}
           <div className={cn("p-2")}>
             <Outlet />
           </div>
-        </ScrollArea>
+        {/* </ScrollArea> */}
 
     </div>
   );

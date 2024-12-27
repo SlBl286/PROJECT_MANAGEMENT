@@ -38,12 +38,7 @@ public class ImageServeMiddleware
         {
             var req = context.Request;
             byte[]? buffer = GetFile(paths.Last());
-            if (paths.Last() == "blank")
-            {
-                byte[]? blankBuffer = GetBlankImage();
-                await context.Response.BodyWriter.WriteAsync(buffer);
-            }
-            else if (buffer != null)
+            if (buffer != null)
             {
                 if (paths.Count == 2)
                 {
@@ -78,7 +73,7 @@ public class ImageServeMiddleware
                             thumbnail.Save(Path.Combine(_cacheFolder, $"{sizes[0]}x{sizes[1]}", $"{m}_{paths.Last()}"));
                         }
 
-                        
+
 
                         byte[] cacheBuffer = File.ReadAllBytes(Path.Combine(_cacheFolder, $"{sizes[0]}x{sizes[1]}", $"{m}_{paths.Last()}"));
                         //
@@ -88,6 +83,15 @@ public class ImageServeMiddleware
                     {
                         context.Response.StatusCode = (int)HttpStatusCode.NotFound;
                     }
+                }
+            }
+            else if (paths[1] == "temp")
+            {
+                buffer = GetTempFile(paths.Last());
+                if (buffer is not null)
+                {
+                    context.Response.Headers.Append("Content-Type", MimeTypesMap.GetMimeType(paths.Last()));
+                    await context.Response.BodyWriter.WriteAsync(buffer);
                 }
             }
             else
@@ -103,18 +107,18 @@ public class ImageServeMiddleware
 
     public byte[]? GetFile(string name)
     {
-        if (File.Exists(Path.Combine(_env.ContentRootPath, "Data_Stores", "salt", "media", name)))
+        if (File.Exists(Path.Combine(_env.ContentRootPath, "Data_Stores", "salt", "avatar", name)))
         {
-            return File.ReadAllBytes(Path.Combine(_env.ContentRootPath, "Data_Stores", "salt", "media", name));
+            return File.ReadAllBytes(Path.Combine(_env.ContentRootPath, "Data_Stores", "salt", "avatar", name));
         }
         return null;
     }
 
-    public byte[]? GetBlankImage()
+    public byte[]? GetTempFile(string name)
     {
-        if (File.Exists(Path.Combine(_env.ContentRootPath, "wwwroot", "assets", "media", "avatars", "blank.png")))
+        if (File.Exists(Path.Combine(_env.ContentRootPath, "Data_Stores", "salt", "temp", name)))
         {
-            return File.ReadAllBytes(Path.Combine(_env.ContentRootPath, "wwwroot", "assets", "media", "avatars", "blank.png"));
+            return File.ReadAllBytes(Path.Combine(_env.ContentRootPath, "Data_Stores", "salt", "temp", name));
         }
         return null;
     }

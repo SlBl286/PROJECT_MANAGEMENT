@@ -5,7 +5,6 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { registerSchema } from "@/features/auth/schema";
-import { uselogin } from "@/features/auth/api/use-login";
 import {
   Form,
   FormControl,
@@ -18,9 +17,13 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { ImageIcon } from "lucide-react";
 import { useRef } from "react";
 import { useUpload } from "@/features/upload/api/use-upload";
+import { useRemove } from "@/features/upload/api/use-remove";
+import { useRegsiter } from "../api/use-register";
+import { TEMP_IMAGE_URL } from "@/config";
 function RegisterForm() {
-  const { mutate, isPending } = uselogin();
+  const { mutate, isPending } = useRegsiter();
   const { mutate:upload, isPending: uploading } = useUpload();
+  const { mutate:removeFile, isPending: removing } = useRemove();
 
   const inputRef = useRef<HTMLInputElement>(null);
   const form = useForm<z.infer<typeof registerSchema>>({
@@ -33,18 +36,41 @@ function RegisterForm() {
   });
   const onSubmit = (values: z.infer<typeof registerSchema>) => {
     console.log(values)
-    mutate(values);
+    mutate(values,{
+      onSuccess: ()=>{
+
+      }
+    });
   };
   const handleImageOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       upload({file : file}, {
-        onSuccess(data, variables, context) {
+        onSuccess(data) {
             console.log(data)
-            form.setValue("avatar", data);
+            form.setValue("avatar",data)
         },
+        onError(error){
+          console.log(error)
+        }
       })
     }
+    
+  };
+  const handleImageOnRemove = (fileName : string | undefined) => {
+    console.log(fileName)
+    if (fileName) {
+      removeFile({fileName : fileName}, {
+        onSuccess(data, variables, context) {
+            console.log(data)
+            form.setValue("avatar",undefined)
+        },
+        onError(error){
+          console.log(error)
+        }
+      })
+    }
+    
   };
   return (
     <Form {...form}>
@@ -53,7 +79,7 @@ function RegisterForm() {
           <FormField
             control={form.control}
             name="avatar"
-            disabled={isPending || uploading}
+            disabled={isPending || uploading || removing}
             render={({ field }) => (
               <div className="flex flex-col gap-y-">
                 <div className="flex items-center gap-x-5">
@@ -63,9 +89,7 @@ function RegisterForm() {
                         alt="Logo"
                         className="object-cover"
                         src={
-                          field.value instanceof File
-                            ? URL.createObjectURL(field.value)
-                            : field.value
+                           TEMP_IMAGE_URL+field.value
                         }
                       />
                     </div>
@@ -87,7 +111,7 @@ function RegisterForm() {
                       accept=".jpg, .png, .jpeg, .svg"
                       ref={inputRef}
                       onChange={handleImageOnChange}
-                      disabled={isPending}
+                      disabled={isPending || uploading}
                     />
                     {!field.value ? (
                       <Button
@@ -104,7 +128,7 @@ function RegisterForm() {
                     ) : (
                       <Button
                         type="button"
-                        disabled={isPending}
+                        disabled={isPending || removing}
                         variant={"destructive"}
                         size={"sm"}
                         className="w-fit mt-2"
@@ -112,6 +136,7 @@ function RegisterForm() {
                           field.onChange(null);
                           if (inputRef.current) {
                             inputRef.current.value = "";
+                            handleImageOnRemove(field.value)
                           }
                         }}
                       >

@@ -11,14 +11,14 @@ public sealed class Project : AggregatetRoot<ProjectId, Guid>
 
     public string Code { get; private set; }
     public string Name { get; private set; }
-    public string Description { get; private set; }
+    public string? Description { get; private set; }
     public UserId CreatedBy { get; private set; }
     public IReadOnlyList<Member> Members => _members.AsReadOnly();
 
     private Project(ProjectId id,
     string code,
                  string name,
-                 string description,
+                 string? description,
                  UserId createdBy,
                  List<Member> members) : base(id)
     {
@@ -32,7 +32,7 @@ public sealed class Project : AggregatetRoot<ProjectId, Guid>
     public static Project Create(ProjectId id,
     string code,
                             string name,
-                              string description,
+                              string? description,
                               UserId createdBy,
                               List<Member> members)
     {

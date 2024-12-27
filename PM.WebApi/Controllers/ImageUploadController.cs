@@ -29,12 +29,42 @@ public class ImageUploadController : ApiController
     [HttpPost("UploadFile")]
     public async Task<IActionResult> UploadFile(IFormFile file)
     {
-        var _tempFolder = Path.Combine(Path.Combine(_env.ContentRootPath, "Data_Stores", "salt", "temp"));
-        var fileName = _hashStringService.HashString(file.FileName)+ Path.GetExtension(file.FileName);
-        using(var fs = new FileStream(Path.Combine(_tempFolder,fileName), FileMode.OpenOrCreate)){
-            await file.CopyToAsync(fs);
+        try
+        {
+
+            var _tempFolder = Path.Combine(Path.Combine(_env.ContentRootPath, "Data_Stores", "salt", "temp"));
+            var fileName = _hashStringService.HashString(file.FileName + DateTime.Now.ToString()) + Path.GetExtension(file.FileName);
+            using (var fs = System.IO.File.Create(Path.Combine(_tempFolder, fileName)))
+            {
+                await file.CopyToAsync(fs);
+            }
+            return Ok(fileName);
         }
-        return Ok(fileName);
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            return NotFound();
+        }
+
+    }
+
+    [HttpPost("RemoveFile")]
+    public async Task<IActionResult> RemoveFile([FromBody]string fileName)
+    {
+        try
+        {
+            await Task.CompletedTask;
+            var _tempFolder = Path.Combine(Path.Combine(_env.ContentRootPath, "Data_Stores", "salt", "temp"));
+            if (System.IO.File.Exists(Path.Combine(_tempFolder, fileName)))
+                System.IO.File.Delete(Path.Combine(_tempFolder, fileName));
+            return Ok(fileName);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            return NotFound();
+        }
+
     }
 
 }

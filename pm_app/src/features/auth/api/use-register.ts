@@ -15,7 +15,7 @@ export const useRegsiter = () => {
       const respone = await api.post<User>("/register", json);
       console.log(respone);
       if (respone.statusText !== "OK") {
-        throw new Error("Failed to log in");
+        throw new Error("Có lỗi khi đăng ký.");
       }
       localStorage.setItem(ACCESS_TOKEN_KEY, respone.data.token);
       localStorage.setItem(REFRESH_TOKEN_KEY, respone.data.refreshToken);
@@ -23,11 +23,11 @@ export const useRegsiter = () => {
       return respone.data.token;
     },
     onSuccess: () => {
-      toast.success("Logged in");
-      navigate(0);
+      toast.success("Đăng ký tài khoản thành công");
+      navigate("/auth/login");
     },
     onError: () => {
-      toast.error("Failed to log in.");
+      toast.error("Có lỗi khi đăng ký.");
     },
   });
 

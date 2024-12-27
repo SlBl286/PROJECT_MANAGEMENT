@@ -34,6 +34,10 @@ public class Repository<T, TId> : IRepository<T, TId> where T : Entity<TId> wher
     {
         return await _dbContext.Set<T>().ToListAsync();
     }
+ public async Task<int> GetCount()
+    {
+        return await _dbContext.Set<T>().CountAsync();
+    }
 
     public async Task AddRange(List<T> entities)
     {
