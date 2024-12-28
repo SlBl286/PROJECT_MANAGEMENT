@@ -23,10 +23,9 @@ public class ProjectController : ApiController{
 
     [HttpPost("Projects")]
     public async Task<IActionResult> Create([FromBody]ProjectRequest request){
-        var requestWithUserId = new ProjectRequest(request.Code, request.Name, request.Description,GetCurrentUserId());
+        var requestWithUserId = new ProjectRequest(request.Code, request.Name, request.Description,GetCurrentUserId(),request.MemberUserIds);
          var command = _mapper.Map<CreateProjectCommand>(requestWithUserId);
         ErrorOr<ProjectResult> projectResult = await _mediator.Send(command);
-       
         return projectResult.Match(
             projectResult => Ok(_mapper.Map<ProjectResponse>(projectResult)),
             errors => Problem(errors: errors)

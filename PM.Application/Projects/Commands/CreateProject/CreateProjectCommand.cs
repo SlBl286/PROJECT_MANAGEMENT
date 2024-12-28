@@ -10,7 +10,7 @@ public record CreateProjectCommand(
     string Name,
     string? Description,
     string CreatedById,
-    List<Member> Members
+    List<string> MemberUserIds
 ) : IRequest<ErrorOr<ProjectResult>>;
 
 public record BarcodeCommand(

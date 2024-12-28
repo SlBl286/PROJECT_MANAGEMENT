@@ -8,6 +8,7 @@ using PM.Domain.ProjectAggregate.Entities;
 using PM.Domain.ProjectAggregate.ValueObjects;
 using PM.Domain.ProjectAggregate;
 using PM.Domain.UserAggregate.ValueObjects;
+using PM.Domain.ProjectAggregate.Enums;
 
 namespace PM.Application.Projects.Commands.CreateItem;
 
@@ -25,7 +26,8 @@ public class CreateItemCommandHandler : IRequestHandler<CreateProjectCommand, Er
         {
             return Errors.Project.DuplicateProject;
         }
-        var members = command.Members.ConvertAll(m=> Member.Create(MemberId.CreateUnique(),m.UserId,m.Role)).ToList();
+        var members = command.MemberUserIds.ConvertAll(m=> Member.Create(MemberId.CreateUnique(),UserId.Create(m),MemerRole.Developer)).ToList();
+        members.Add(Member.Create(MemberId.CreateUnique(),UserId.Create(command.CreatedById),MemerRole.ProjectManager));
         var item = Project.Create(ProjectId.CreateUnique(),
          command.Code,
          command.Name,

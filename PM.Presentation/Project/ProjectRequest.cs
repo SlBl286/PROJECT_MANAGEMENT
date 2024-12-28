@@ -4,5 +4,6 @@ public record ProjectRequest(
     string Code,
     string Name,
     string Description,
-    string CreatedById
+    string CreatedById,
+    List<string> MemberUserIds
 );

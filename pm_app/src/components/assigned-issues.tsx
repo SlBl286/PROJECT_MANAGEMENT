@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 
 export function AssignedIssues() {
@@ -12,6 +12,7 @@ export function AssignedIssues() {
     <Card>
       <CardHeader>
         <CardTitle>Assigned Issues</CardTitle>
+        <CardDescription></CardDescription>
       </CardHeader>
       <CardContent>
         <ul className="space-y-4">
