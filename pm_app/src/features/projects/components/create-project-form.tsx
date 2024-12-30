@@ -12,19 +12,23 @@ import { useForm } from "react-hook-form";
 import { createProjectSchema } from "../schemas";
 import { z } from "zod";
 import { Input } from "@/components/ui/input";
-import { useRef } from "react";
 import { useCreateProject } from "../api/use-create-project";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
+import { MultiSelect, MultiSelectOption } from "@/components/multi-select";
+import { useGetUsers } from "@/features/users/api/use-get-users";
 
 const CreateProjectForm = () => {
   const { mutate, isPending } = useCreateProject();
+  const { data: users ,refetch} = useGetUsers({includeMe:false});
+
   const form = useForm<z.infer<typeof createProjectSchema>>({
     resolver: zodResolver(createProjectSchema),
     defaultValues: {
       code: "",
       name: "",
       description: "",
+      memberUserIds: [],
     },
   });
 
@@ -39,14 +43,14 @@ const CreateProjectForm = () => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
-        <div className="flex flex-col md:flex-row gap-y-4 w-full flex-wrap">
+        <div className="flex flex-col gap-y-4 w-full">
           <FormField
             control={form.control}
             name="code"
             disabled={isPending}
             render={({ field }) => (
               <div>
-                <FormLabel>Mã sản phẩm</FormLabel>
+                <FormLabel>Mã dự án</FormLabel>
                 <FormItem>
                   <Input {...field} />
                 </FormItem>
@@ -60,7 +64,7 @@ const CreateProjectForm = () => {
             disabled={isPending}
             render={({ field }) => (
               <div>
-                <FormLabel>Tên sản phẩm</FormLabel>
+                <FormLabel>Tên dự án</FormLabel>
                 <FormItem>
                   <Input {...field} />
                 </FormItem>
@@ -86,18 +90,20 @@ const CreateProjectForm = () => {
 
           <FormField
             control={form.control}
-            name="members"
+            name="memberUserIds"
             disabled={isPending}
             render={({ field }) => (
               <div>
-                <FormLabel>Mã vạch</FormLabel>
+                <FormLabel>Thành viên</FormLabel>
                 <FormItem>
-                  <Input
-                    onKeyDownCapture={(e) => {
-                      if (e.key === "Enter") {
-                        e.preventDefault();
-                      }
-                    }}
+                  <MultiSelect
+                    options={users != undefined ? users.users.map((u) => {
+                      return { label: u.name, value: u.id };
+                    }) : []}
+                    selected={field.value}
+                    onChange={field.onChange}
+                    onOpen={(state)=> {refetch()}}
+                    className="w-full"
                   />
                 </FormItem>
                 <FormMessage />
@@ -108,7 +114,7 @@ const CreateProjectForm = () => {
         <div className="py-4">
           <Separator />
         </div>
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-end gap-x-2">
           <Button
             type="button"
             size={"lg"}

@@ -8,4 +8,6 @@ public interface IUserRepository : IRepository<User,UserId>
     Task<User?> GetUserByUsername(string username);
     Task<bool> ExistsAsync(string username);
     Task<User?> GetUserByRefreshToken(string refreshToken);
+    Task<List<User>> GetList(Guid excludeId);
+
 }

@@ -6,6 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using PM.Application.Users.Common;
 using PM.Application.Users.Queries.GetUser;
+using PM.Application.Users.Queries.GetUsers;
 using PM.Presentation.User;
 
 namespace PM.WebApi.Controllers;
@@ -32,6 +33,23 @@ public class UserController : ApiController
         ErrorOr<UserResult> userResult = await _mediator.Send(query);
         return userResult.Match(
            userResult => Ok(_mapper.Map<UserResponse>(userResult)),
+           errors => Problem(errors)
+       );
+    }
+
+    [HttpGet("Users")]
+    public async Task<IActionResult> GetUsers([FromQuery]UsersRequest request)
+    {
+        Guid? userId = null;
+        if (!request.IncludeMe)
+        {
+            var traceId = HttpContext?.TraceIdentifier;
+            userId = Guid.Parse(GetCurrentUserId());
+        }
+        var query = _mapper.Map<GetUsersQuery>(userId.HasValue ? userId.Value : Guid.Empty);
+        ErrorOr<UsersResult> usersResult = await _mediator.Send(query);
+        return usersResult.Match(
+           usersResult => Ok(_mapper.Map<UsersResponse>(usersResult)),
            errors => Problem(errors)
        );
     }

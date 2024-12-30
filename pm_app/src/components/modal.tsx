@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -9,30 +9,28 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
-import { PlusIcon } from "lucide-react";
 type ModalProps = {
-    chidldren: React.ReactNode
-}
-const Modal = () => {
-
+  chidldren: React.ReactNode;
+  buttonLabel : string;
+  modalTitle: string;
+};
+const Modal = ({chidldren,buttonLabel,modalTitle}:ModalProps) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">
-          <PlusIcon />
+        <Button variant="link" className="w-full flex justify-start">
+            {buttonLabel}
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-3xl">
         <DialogHeader>
-          <DialogTitle>Thêm sản phẩm</DialogTitle>
+          <DialogTitle>{modalTitle}</DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
         <div className="py-4">
           <Separator />
         </div>
-        <div>
-        
-        </div>
+        <div>{chidldren}</div>
       </DialogContent>
     </Dialog>
   );

@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { ModeToggle } from "./mode-tggle";
+import { CreateProjectModal } from "@/features/projects/components/create-project-modal";
 export function Header() {
   return (
     <header className="border-b">
@@ -44,7 +45,9 @@ export function Header() {
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuItem>Issue</DropdownMenuItem>
+              <DropdownMenuItem asChild>
+              <CreateProjectModal/>
+              </DropdownMenuItem>
               <DropdownMenuItem>Project</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

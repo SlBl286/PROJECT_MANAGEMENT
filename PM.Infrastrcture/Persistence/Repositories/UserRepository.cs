@@ -26,8 +26,13 @@ public class UserRepository : Repository<User, UserId>, IUserRepository
 
     public async Task<User?> GetUserByUsername(string username)
     {
-        var user = await _dbContext.Set<User>().AsNoTracking().FirstOrDefaultAsync(u => u.Username == username);
+        var user = await _dbContext.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Username == username);
         return user;
     }
 
+    public async Task<List<User>> GetList(Guid excludeId)
+    {
+        var users = await _dbContext.Set<User>().AsNoTracking().Where(u => u.Id != UserId.Create(excludeId) ).ToListAsync();
+        return users;
+    }
 }

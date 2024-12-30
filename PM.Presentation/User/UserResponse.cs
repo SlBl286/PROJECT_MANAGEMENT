@@ -9,3 +9,6 @@ public record UserResponse(
     string Avatar,
     int Role
 );
+public record UsersResponse(
+    List<UserResponse> Users
+);
