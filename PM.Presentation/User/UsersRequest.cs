@@ -1,5 +1,6 @@
 namespace PM.Presentation.User;
 
 public record UsersRequest(
-    bool IncludeMe
+    bool IncludeMe,
+    Guid? ProjectId = null
 );

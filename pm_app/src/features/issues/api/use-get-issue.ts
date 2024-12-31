@@ -1,15 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 import api from "../../../api/api";
-import { Projects } from "../types";
+import { Issue } from "../types";
 type UseGetItemsProps = {
+    keyword : string;
+    categoryId : string | null;
 }
-export const useGetProjects= ({}: UseGetItemsProps) => {
+export const useGetItems= ({keyword,categoryId}: UseGetItemsProps) => {
   const query = useQuery({
-    queryKey: ["projects"],
+    queryKey: ["projects",keyword,categoryId],
     queryFn: async () => {
       try {
-        const respone = await api.get<Projects>("/projects",{})
-        console.log(respone)
+        const respone = await api.get<Issue[]>("/issues",{params: {keyword,categoryId}})
         if (respone.statusText !== "OK") {
           return null;
       }

@@ -7,6 +7,6 @@ namespace PM.Application.Common.Interfaces.Persistence;
 
 public interface IProjectRepository : IRepository<Project,ProjectId>
 {
-
     Task<bool> ExistsAsync(string code);
+    Task<List<Project>> GetListByUserId(UserId userId);
 }

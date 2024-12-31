@@ -11,6 +11,7 @@ import {
 } from "./ui/dropdown-menu";
 import { ModeToggle } from "./mode-tggle";
 import { CreateProjectModal } from "@/features/projects/components/create-project-modal";
+import { CreateIssueModal } from "@/features/issues/components/create-issue-modal";
 export function Header() {
   return (
     <header className="border-b">
@@ -39,16 +40,18 @@ export function Header() {
           </a>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button className="bg-blue-700">
-              <Plus />
-              Tạo mới
-                </Button>
+              <Button className="bg-blue-700">
+                <Plus />
+                Tạo mới
+              </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuItem asChild>
-              <CreateProjectModal/>
+                <CreateProjectModal />
               </DropdownMenuItem>
-              <DropdownMenuItem>Project</DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <CreateIssueModal />
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </nav>
@@ -67,7 +70,7 @@ export function Header() {
             <Bell className="h-5 w-5" />
             <span className="sr-only">Notifications</span>
           </Button>
-          <ModeToggle/>
+          <ModeToggle />
           <UserMenu />
         </div>
       </div>

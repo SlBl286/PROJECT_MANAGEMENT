@@ -7,8 +7,10 @@ import { ACCESS_TOKEN_KEY } from "@/config";
 import AuthLayout from "@/app/auth/layout";
 import MainLayout from "@/app/main/MainLayout";
 import DashboardPage from "@/app/main/dashboard/page";
-import UserNamePage from "@/app/main/user/user-name";
+import UserNamePage from "@/app/main/users/user-name";
 import RegisterPage from "@/app/auth/register/page";
+import ProjectsPage from "@/app/main/projects/projects";
+import ProjectDetailPage from "@/app/main/projects/project-detail";
 
 export const router = createBrowserRouter([
   {
@@ -30,8 +32,16 @@ export const router = createBrowserRouter([
         element: <DashboardPage />,
       },
       {
-        path: "user/:username",
+        path: "users/:username",
         element: <UserNamePage />,
+      },
+      {
+        path: "projects",
+        element: <ProjectsPage />,
+      },
+      {
+        path: "projects/:projectId",
+        element: <ProjectDetailPage />,
       },
     ],
   },

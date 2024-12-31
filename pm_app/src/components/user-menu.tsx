@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { IMAGE_URL, TEMP_IMAGE_URL } from "@/config";
-import { UserRole } from "@/enums";
+import { UserRole } from "@/features/users/enums";
 import { useCurrent } from "@/features/auth/api/use-current";
 import { useLogout } from "@/features/auth/api/use-logout";
 import {

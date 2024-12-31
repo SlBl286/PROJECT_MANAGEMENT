@@ -9,6 +9,9 @@ public record ProjectResponse(
     List<MemberRespone> Members,
     DateTime UpdatedAt
 );
+public record ProjectsResponse(
+    List<ProjectResponse> Projects
+);
 
 public record MemberRespone(
    string UserId,

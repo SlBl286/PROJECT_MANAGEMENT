@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 
 using PM.Domain.Common.Models;
+using PM.Domain.IssueAggregate;
 using PM.Domain.ProjectAggregate;
 using PM.Domain.UserAggregate;
 using PM.Infrastrcture.Persistence.Interceptors;
@@ -18,6 +19,8 @@ public class PMDbContext : DbContext
 
     public DbSet<User> Users { get; set; } = null!;
     public DbSet<Project> Projects { get; set; } = null!;
+        public DbSet<Issue> Issues { get; set; } = null!;
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

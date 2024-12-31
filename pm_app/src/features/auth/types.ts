@@ -1,4 +1,4 @@
-import { UserRole } from "@/enums"
+import { UserRole } from "@/features/users/enums"
 
 export type Login= {
     username : string,

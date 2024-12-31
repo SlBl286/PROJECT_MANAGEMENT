@@ -1,18 +1,14 @@
-import { MemberRole } from "./enum"
-
-export type Project= {
+export type Issue= {
     id : string,
     code: string,
     name: string,
     description : string,
     members : ProjectMember[],
 }
-export type Projects= {
-    projects : Project[],
-}
 
 export type ProjectMember= {
     id : string,
-    userId :string,
-    role : MemberRole
+    code: string,
+    name: string,
+    description : number,
 }

@@ -27,7 +27,7 @@ const Modal = ({chidldren,buttonLabel,modalTitle}:ModalProps) => {
           <DialogTitle>{modalTitle}</DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
-        <div className="py-4">
+        <div >
           <Separator />
         </div>
         <div>{chidldren}</div>

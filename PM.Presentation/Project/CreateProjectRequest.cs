@@ -1,6 +1,6 @@
 namespace PM.Presentation.Project;
 
-public record ProjectRequest(
+public record CreateProjectRequest(
     string Code,
     string Name,
     string Description,
