@@ -11,6 +11,8 @@ import UserNamePage from "@/app/main/users/user-name";
 import RegisterPage from "@/app/auth/register/page";
 import ProjectsPage from "@/app/main/projects/projects";
 import ProjectDetailPage from "@/app/main/projects/project-detail";
+import IssuesPage from "@/app/main/issues/issues";
+import IssueDetailPage from "@/app/main/issues/issue-detail";
 
 export const router = createBrowserRouter([
   {
@@ -42,6 +44,14 @@ export const router = createBrowserRouter([
       {
         path: "projects/:projectId",
         element: <ProjectDetailPage />,
+      },
+      {
+        path: "issues",
+        element: <IssuesPage />,
+      },
+      {
+        path: "issues/:issueId",
+        element: <IssueDetailPage />,
       },
     ],
   },

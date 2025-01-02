@@ -11,7 +11,7 @@ import { useGetProjects } from "@/features/projects/api/use-get-projects";
 import { Plus } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 
-function ProjectsPage() {
+function IssuesPage() {
   const navigate = useNavigate()
   const { data } = useGetProjects({});
   return (
@@ -49,4 +49,4 @@ function ProjectsPage() {
   );
 }
 
-export default ProjectsPage;
+export default IssuesPage;

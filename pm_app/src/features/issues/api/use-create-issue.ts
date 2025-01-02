@@ -5,7 +5,7 @@ import api from "@/api/api";
 import { createIssueSchema } from "../schemas";
 import { z } from "zod";
 
-export const useCreateProject = () => {
+export const useCreateIssue = () => {
   const queryClient = useQueryClient();
 const mutation = useMutation<Issue, Error,z.infer<typeof createIssueSchema> >({
     mutationFn: async (form) => {

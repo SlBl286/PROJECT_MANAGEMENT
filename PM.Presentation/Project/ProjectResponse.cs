@@ -6,14 +6,22 @@ public record ProjectResponse(
     string Name,
     string Description,
     string CreatedById,
-    List<MemberRespone> Members,
+    List<ProjectMemberResponse> Members,
     DateTime UpdatedAt
 );
 public record ProjectsResponse(
     List<ProjectResponse> Projects
 );
-
-public record MemberRespone(
+public record ProjectMemberResponse(
    string UserId,
    int Role
+);
+public record MemberResponse(
+   string UserId,
+   string Username,
+   int Role
+);
+
+public record MembersResponse(
+    List<MemberResponse> Members
 );

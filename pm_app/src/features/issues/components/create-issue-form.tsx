@@ -12,20 +12,28 @@ import { useForm } from "react-hook-form";
 import { createIssueSchema } from "../schemas";
 import { z } from "zod";
 import { Input } from "@/components/ui/input";
-import { useCreateProject } from "../api/use-create-issue";
+import { useCreateIssue } from "../api/use-create-issue";
 import { Separator } from "@/components/ui/separator";
 import { useGetUsers } from "@/features/users/api/use-get-users";
 import { IssuePriority, IssueType } from "../enums";
 import { Combobox } from "@/components/combobox";
 import { useGetProjects } from "@/features/projects/api/use-get-projects";
-import { useQuill } from 'react-quilljs';
-import 'quill/dist/quill.snow.css';
-const CreateIssueForm = () => {
+import { useQuill } from "react-quilljs";
+import "quill/dist/quill.snow.css";
+import { useGetMembers } from "@/features/projects/api/use-get-members";
+import { useState } from "react";
+
+interface CreateIssueFormProps {
+  onCancel?: () => void;
+}
+
+const CreateIssueForm = ({ onCancel }: CreateIssueFormProps) => {
+  const [selectedProjectId, setSelectedProjectId] = useState("");
   const { quill, quillRef } = useQuill();
-  const { mutate, isPending } = useCreateProject();
+  const { mutate, isPending } = useCreateIssue();
   const { data: projects, refetch: refreshProjects } = useGetProjects({});
-  const { data: users, refetch: refreshUsers } = useGetUsers({
-    includeMe: true,
+  const { data: members, refetch: refreshMembers } = useGetMembers({
+    projectId: selectedProjectId,
   });
 
   const form = useForm<z.infer<typeof createIssueSchema>>({
@@ -40,8 +48,7 @@ const CreateIssueForm = () => {
   });
 
   const onSubmit = (values: z.infer<typeof createIssueSchema>) => {
-    console.log(quill?.getText());
-    console.log(values)
+    console.log(values);
     // mutate(values, {
     //   onSuccess: ({}) => {
     //     form.reset();
@@ -63,7 +70,11 @@ const CreateIssueForm = () => {
                 <FormItem>
                   <Combobox
                     blankLabel="Chọn dự án..."
-                    onChange={field.onChange}
+                    onChange={(value) => {
+                      form.setValue("projectId", value);
+                      setSelectedProjectId(value);
+                      form.setValue("assigneeId", "");
+                    }}
                     value={field.value}
                     options={
                       projects != undefined
@@ -104,12 +115,16 @@ const CreateIssueForm = () => {
                 <FormLabel>Loại công việc</FormLabel>
                 <FormItem>
                   <Combobox
-                    onChange={(value)=>{form.setValue("type",parseInt(value))}}
+                    onChange={(value) => {
+                      form.setValue("type", parseInt(value));
+                    }}
                     value={field.value.toString()}
                     blankLabel="Loại công việc"
-                    options={
-                     Object.values(IssueType).filter(it=>typeof it === "string").map((v,i)=> {return {label:v.toString() , value :i.toString()}})
-                    }
+                    options={Object.values(IssueType)
+                      .filter((it) => typeof it === "string")
+                      .map((v, i) => {
+                        return { label: v.toString(), value: i.toString() };
+                      })}
                   />
                 </FormItem>
                 <FormMessage />
@@ -125,12 +140,16 @@ const CreateIssueForm = () => {
                 <FormLabel>Mức độ ưu tiên</FormLabel>
                 <FormItem>
                   <Combobox
-                    onChange={(value)=>{form.setValue("priority",parseInt(value))}}
+                    onChange={(value) => {
+                      form.setValue("priority", parseInt(value));
+                    }}
                     value={field.value.toString()}
                     blankLabel="Mức độ ưu tiên"
-                    options={
-                      Object.values(IssuePriority).filter(it=>typeof it === "string").map((v,i)=> {return {label:v.toString() , value : i.toString()}})
-                    }
+                    options={Object.values(IssuePriority)
+                      .filter((it) => typeof it === "string")
+                      .map((v, i) => {
+                        return { label: v.toString(), value: i.toString() };
+                      })}
                   />
                 </FormItem>
                 <FormMessage />
@@ -150,9 +169,9 @@ const CreateIssueForm = () => {
                     value={field.value}
                     blankLabel="Giao cho"
                     options={
-                      users !== undefined
-                        ? users.users.map((u) => {
-                            return { label: u.name, value: u.id };
+                      members !== undefined
+                        ? members.members.map((u) => {
+                            return { label: u.username, value: u.userId };
                           })
                         : []
                     }
@@ -170,7 +189,7 @@ const CreateIssueForm = () => {
               <div className="h-[300px] overflow-hidden mb-0">
                 <FormLabel>Mô tả</FormLabel>
                 <FormItem className="overflow-hidden rounded-md">
-                  <div ref={quillRef}/>
+                  <div ref={quillRef} />
                 </FormItem>
                 <FormMessage />
               </div>
@@ -186,6 +205,9 @@ const CreateIssueForm = () => {
             size={"lg"}
             variant={"secondary"}
             disabled={isPending}
+            onClick={() => {
+              if (onCancel) onCancel();
+            }}
           >
             Huỷ bỏ
           </Button>

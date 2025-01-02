@@ -27,4 +27,15 @@ public class ProjectRepository : Repository<Project, ProjectId>, IProjectReposit
 
         return projects;
     }
+
+    public async Task<List<Member>> GetMembers(ProjectId projecctId)
+    {
+        var project = await _dbContext.Set<Project>().FirstOrDefaultAsync(p=> p.Id == projecctId);
+        if( project is not null){
+
+            return [.. project.Members];
+        }
+
+        return [];
+    }
 }

@@ -9,7 +9,6 @@ export const useGetProjects= ({}: UseGetItemsProps) => {
     queryFn: async () => {
       try {
         const respone = await api.get<Projects>("/projects",{})
-        console.log(respone)
         if (respone.statusText !== "OK") {
           return null;
       }

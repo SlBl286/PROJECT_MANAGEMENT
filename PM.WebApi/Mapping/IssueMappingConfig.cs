@@ -11,7 +11,7 @@ using PM.Presentation.User;
 
 namespace PM.WebApi.Mapping;
 
-public class ProjectMappingConfig : IRegister
+public class IssueMappingConfig : IRegister
 {
     public void Register(TypeAdapterConfig config)
     {

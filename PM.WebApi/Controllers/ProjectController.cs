@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using PM.Application.Projects.Commands.CreateProject;
 using PM.Application.Projects.Common;
+using PM.Application.Projects.Queries.GetProjectMembers;
 using PM.Application.Projects.Queries.GetProjects;
 using PM.Presentation.Project;
 
@@ -47,5 +48,14 @@ public class ProjectController : ApiController
            errors => Problem(errors)
        );
     }
-
+    [HttpGet("Projects/{projectId:guid}/Members")]
+    public async Task<IActionResult> GetUserMemberProjects([FromRoute] Guid projectId)
+    {
+        var query = _mapper.Map<GetProjectMembersQuery>(projectId);
+        ErrorOr<MembersResult> membersResult = await _mediator.Send(query);
+        return membersResult.Match(
+           membersResult => Ok(_mapper.Map<MembersResponse>(membersResult)),
+           errors => Problem(errors)
+       );
+    }
 }

@@ -14,5 +14,10 @@ export type Projects= {
 export type ProjectMember= {
     id : string,
     userId :string,
-    role : MemberRole
+    role : MemberRole,
+    username :  string,
+}
+
+export type Members= {
+    members : ProjectMember[],
 }

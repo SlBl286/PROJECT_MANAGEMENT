@@ -2,8 +2,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Bug } from "lucide-react";
 import { useParams } from "react-router-dom";
 
-function ProjectDetailPage() {
-  const { projectId } = useParams();
+function IssueDetailPage() {
+  const { issueId } = useParams();
   return (
     <div className="grid grid-cols-3 gap-4">
       <div className="col-span-3">
@@ -54,4 +54,4 @@ function ProjectDetailPage() {
   );
 }
 
-export default ProjectDetailPage;
+export default IssueDetailPage;
