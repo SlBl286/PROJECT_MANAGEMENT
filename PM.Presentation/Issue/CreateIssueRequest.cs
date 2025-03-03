@@ -2,7 +2,6 @@ namespace PM.Presentation.Project;
 
 public record CreateIssueRequest(
     Guid ProjectId,
-    string Code,
     string Title,
     string Description,
     Guid AssigneeId,
@@ -11,7 +10,6 @@ public record CreateIssueRequest(
 );
 public record CreateIssueRequestWithReporterId(
     Guid ProjectId,
-    string Code,
     string Title,
     string Description,
     Guid AssigneeId,

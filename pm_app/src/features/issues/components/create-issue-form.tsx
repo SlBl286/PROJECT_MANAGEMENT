@@ -35,7 +35,12 @@ const CreateIssueForm = ({ onCancel }: CreateIssueFormProps) => {
   const { data: members, refetch: refreshMembers } = useGetMembers({
     projectId: selectedProjectId,
   });
+  if(quill){
+    quill.on("text-change",()=> {
+      form.setValue("description",quill?.root.innerHTML)
 
+    })
+  }
   const form = useForm<z.infer<typeof createIssueSchema>>({
     resolver: zodResolver(createIssueSchema),
     defaultValues: {
@@ -48,12 +53,12 @@ const CreateIssueForm = ({ onCancel }: CreateIssueFormProps) => {
   });
 
   const onSubmit = (values: z.infer<typeof createIssueSchema>) => {
-    console.log(values);
-    // mutate(values, {
-    //   onSuccess: ({}) => {
-    //     form.reset();
-    //   },
-    // });
+    
+    mutate(values, {
+      onSuccess: ({}) => {
+        form.reset();
+      },
+    });
   };
 
   return (
@@ -189,7 +194,7 @@ const CreateIssueForm = ({ onCancel }: CreateIssueFormProps) => {
               <div className="h-[300px] overflow-hidden mb-0">
                 <FormLabel>Mô tả</FormLabel>
                 <FormItem className="overflow-hidden rounded-md">
-                  <div ref={quillRef} />
+                  <div ref={quillRef}  />
                 </FormItem>
                 <FormMessage />
               </div>

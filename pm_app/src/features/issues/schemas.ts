@@ -6,6 +6,5 @@ export const createIssueSchema = z.object({
   priority: z.nativeEnum(IssuePriority),
   type: z.nativeEnum(IssueType),
   assigneeId: z.string(),
-  reporterId: z.string(),
   projectId: z.string(),
 });

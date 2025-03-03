@@ -1,14 +1,21 @@
-export type Issue= {
+import { IssuePriority, IssueStatus, IssueType } from "./enums"
+
+export type Issue = {
     id : string,
     code: string,
-    name: string,
+    title: string,
     description : string,
-    members : ProjectMember[],
+    status :IssueStatus,
+    priority : IssuePriority,
+    type : IssueType,
+    assigneeId : string,
+    reporterId: string,
+    projectId:  string,
+    CreatedAt : Date
 }
 
-export type ProjectMember= {
-    id : string,
-    code: string,
-    name: string,
-    description : number,
+
+export type Issues = {
+    issues: Issue[]
 }
+

@@ -9,7 +9,6 @@ export const useCreateIssue = () => {
   const queryClient = useQueryClient();
 const mutation = useMutation<Issue, Error,z.infer<typeof createIssueSchema> >({
     mutationFn: async (form) => {
-      console.log(form);
       const respone = await api.post<Issue>("/issues", form);
       if (respone.status !== 201) {
         throw new Error("Có lỗi xảy ra khi tạo mới");

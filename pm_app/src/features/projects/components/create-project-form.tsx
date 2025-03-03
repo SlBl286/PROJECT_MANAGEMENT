@@ -17,8 +17,11 @@ import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { MultiSelect, MultiSelectOption } from "@/components/multi-select";
 import { useGetUsers } from "@/features/users/api/use-get-users";
-
-const CreateProjectForm = () => {
+interface CreateProjectFormProps {
+  onCancel: () => void;
+  onSucces?: ()=> void;
+}
+const CreateProjectForm = ({onCancel,onSucces}:CreateProjectFormProps) => {
   const { mutate, isPending } = useCreateProject();
   const { data: users ,refetch} = useGetUsers({includeMe:false});
 
@@ -35,6 +38,7 @@ const CreateProjectForm = () => {
   const onSubmit = (values: z.infer<typeof createProjectSchema>) => {
     mutate(values, {
       onSuccess: ({}) => {
+        if(onSucces) onSucces();
         form.reset();
       },
     });
@@ -120,6 +124,7 @@ const CreateProjectForm = () => {
             size={"lg"}
             variant={"secondary"}
             disabled={isPending}
+            onClick={()=> {onCancel()}}
           >
             Huỷ bỏ
           </Button>

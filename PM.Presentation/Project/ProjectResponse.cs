@@ -14,7 +14,8 @@ public record ProjectsResponse(
 );
 public record ProjectMemberResponse(
    string UserId,
-   int Role
+   int Role,
+string Username
 );
 public record MemberResponse(
    string UserId,

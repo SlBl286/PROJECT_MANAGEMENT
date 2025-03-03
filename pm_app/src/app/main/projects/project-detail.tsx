@@ -1,15 +1,17 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useGetProject } from "@/features/projects/api/use-get-project";
 import { Bug } from "lucide-react";
 import { useParams } from "react-router-dom";
 
 function ProjectDetailPage() {
   const { projectId } = useParams();
+    const { data } = useGetProject({projectId: projectId??""});
   return (
     <div className="grid grid-cols-3 gap-4">
-      <div className="col-span-3">
+      <div className="col-span-3" >
       <Card>
           <CardHeader>
-            <CardTitle>Dự án : ABC</CardTitle>
+            <CardTitle>Dự án : {data?.name}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4"></div>
@@ -33,7 +35,12 @@ function ProjectDetailPage() {
             <CardTitle>Thành viên</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4"></div>
+
+              {data?.members.map(m=> (
+                <div key={m.id} className="space-x-4"> 
+                  {m.username}
+                </div>
+              ))}
           </CardContent>
         </Card>
         </div>

@@ -14,18 +14,19 @@ namespace PM.Application.Issues.Commands.CreateIssue;
 public class CreateIssueCommandHandler : IRequestHandler<CreateIssueCommand, ErrorOr<IssueResult>>
 {
     private readonly IIssueRepository _issueRepository;
-    public CreateIssueCommandHandler(IIssueRepository issueRepository)
+    private readonly IProjectRepository _projectRepository;
+    public CreateIssueCommandHandler(IIssueRepository issueRepository, IProjectRepository projectRepository)
     {
         _issueRepository = issueRepository;
+        _projectRepository = projectRepository;
     }
 
     public async Task<ErrorOr<IssueResult>> Handle(CreateIssueCommand command, CancellationToken cancellationToken)
     {
-        if (await _issueRepository.ExistsAsync(command.Code))
-        {
-            return Errors.Issue.DuplicateIssue;
-        }
-        var issue = Issue.Create(IssueId.CreateUnique(), command.Code, command.Title, command.Description, IssueStatus.Open, (IssuePriority)command.Priority, (IssueType)command.Type, UserId.Create(command.AssigneeId), UserId.Create(command.ReporterId), ProjectId.Create(command.ProjectId), [], []);
+        var projectId = ProjectId.Create(command.ProjectId);
+        var project = await _projectRepository.GetById(projectId);
+        var totalIssue = await _issueRepository.CountByProjectId(projectId);
+        var issue = Issue.Create(IssueId.CreateUnique(), project!.Code + "-"+ (totalIssue+1).ToString(), command.Title, command.Description, IssueStatus.Open, (IssuePriority)command.Priority, (IssueType)command.Type, UserId.Create(command.AssigneeId), UserId.Create(command.ReporterId), ProjectId.Create(command.ProjectId), [], []);
         await _issueRepository.Add(issue);
         return new IssueResult(issue);
     }

@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using PM.Application.Projects.Commands.CreateProject;
 using PM.Application.Projects.Common;
+using PM.Application.Projects.Queries.GetProject;
 using PM.Application.Projects.Queries.GetProjectMembers;
 using PM.Application.Projects.Queries.GetProjects;
 using PM.Presentation.Project;
@@ -31,7 +32,7 @@ public class ProjectController : ApiController
         var command = _mapper.Map<CreateProjectCommand>(ProjectRequestWithCreatedBy);
         ErrorOr<ProjectResult> projectResult = await _mediator.Send(command);
         return projectResult.Match(
-            projectResult => Ok(_mapper.Map<ProjectResponse>(projectResult)),
+            projectResult => Created("Projects",_mapper.Map<ProjectResponse>(projectResult)),
             errors => Problem(errors: errors)
         );
     }
@@ -45,6 +46,16 @@ public class ProjectController : ApiController
         ErrorOr<ProjectsResult> projectsResult = await _mediator.Send(query);
         return projectsResult.Match(
            projectsResult => Ok(_mapper.Map<ProjectsResponse>(projectsResult)),
+           errors => Problem(errors)
+       );
+    }
+     [HttpGet("Projects/{projectId:guid}")]
+    public async Task<IActionResult> GetProject([FromRoute] Guid projectId)
+    {
+        var query = _mapper.Map<GetProjectQuery>(projectId);
+        ErrorOr<ProjectResult> projectResult = await _mediator.Send(query);
+        return projectResult.Match(
+           projectResult => Ok(_mapper.Map<ProjectResponse>(projectResult)),
            errors => Problem(errors)
        );
     }

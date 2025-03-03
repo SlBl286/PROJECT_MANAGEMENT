@@ -7,38 +7,37 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useGetProjects } from "@/features/projects/api/use-get-projects";
+import { useGetIssues } from "@/features/issues/api/use-get-issue";
+import { IssuePriority, IssueStatus } from "@/features/issues/enums";
 import { Plus } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 
 function IssuesPage() {
   const navigate = useNavigate()
-  const { data } = useGetProjects({});
+  const { data } = useGetIssues({me: true});
   return (
     <div className="w-full">
       <div className="flex justify-between mb-4">
-        <h1 className="text-3xl font-bold">Dự án</h1>
+        <h1 className="text-3xl font-bold">Danh sách công việc của bạn</h1>
         <Button className="bg-blue-700" size={"lg"}>
-          <Plus /> Tạo dự án
+          <Plus /> Tạo công việc
         </Button>
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {data?.projects.map((p) => (
-          <Card className=" hover:cursor-pointer hover:bg-gray-700/10" key={p.id} onClick={()=> {
-            navigate(p.id)
+      <div className="grid grid-cols-1 gap-4">
+        {data?.issues.map((i) => (
+          <Card className=" hover:cursor-pointer hover:bg-gray-700/10" key={i.id} onClick={()=> {
+            navigate(i.id)
           }}>
             <CardHeader className="flex flex-row justify-between">
               <div className="w-9/12 overflow-hidden">
                 <CardTitle className="">
-                  <span className="text-xl text-muted-foreground">
-                    {p.code}
-                  </span>{" "}
-                  - <span className="text-xl font-bold">{p.name}</span>
+                <span className="text-2xl font-semibold">{i.title}</span>
                 </CardTitle>
-              <CardDescription>{p.description}</CardDescription>
+              <CardDescription className="text-2xl font-semibold">{i.code}</CardDescription>
               </div>
-              <div>
-                <Badge>Active</Badge>
+              <div className="">
+              <Badge>{IssuePriority[i.priority]}</Badge>
+              <Badge>{IssueStatus[i.status]}</Badge>
               </div>
             </CardHeader>
             <CardContent></CardContent>

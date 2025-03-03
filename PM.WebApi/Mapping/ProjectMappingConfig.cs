@@ -1,10 +1,9 @@
 using Mapster;
 using PM.Application.Projects.Commands.CreateProject;
 using PM.Application.Projects.Common;
+using PM.Application.Projects.Queries.GetProject;
 using PM.Application.Projects.Queries.GetProjectMembers;
 using PM.Application.Projects.Queries.GetProjects;
-using PM.Application.Users.Common;
-using PM.Application.Users.Queries.GetUser;
 using PM.Domain.ProjectAggregate.Entities;
 using PM.Presentation.Project;
 using PM.Presentation.User;
@@ -18,6 +17,8 @@ public class ProjectMappingConfig : IRegister
         //Members
         config.NewConfig<Guid,GetProjectMembersQuery>()
                     .Map(dest  => dest.ProjectId, src=> src);
+                config.NewConfig<Guid,GetProjectQuery>()
+                    .Map(dest  => dest.ProjectId, src=> src);
         config.NewConfig<MemberResult, MemberResponse>()
                     .Map(dest => dest.UserId, src => src.Member.Id.Value)
                     .Map(dest => dest.Username, src => src.UserName)
@@ -27,7 +28,8 @@ public class ProjectMappingConfig : IRegister
 
         //Project
         config.NewConfig<Member, ProjectMemberResponse>()
-                    .Map(dest => dest.UserId, src => src.UserId.Value);
+                    .Map(dest => dest.UserId, src => src.UserId.Value)
+                    .Map(dest => dest, src => src);
         config.NewConfig<ProjectRequestWithCreatedBy,CreateProjectCommand>()
                     .Map(dest  => dest, src=> src);
         config.NewConfig<Guid,GetProjectsQuery>()

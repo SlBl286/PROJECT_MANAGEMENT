@@ -6,7 +6,6 @@ import { Toaster } from './components/ui/sonner.tsx'
 import { router } from './routes/routes.tsx'
 import { RouterProvider } from 'react-router-dom'
 import { QueryProvider } from './components/query-provider.tsx'
-
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">

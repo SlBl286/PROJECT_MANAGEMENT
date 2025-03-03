@@ -85,9 +85,9 @@ export function MultiSelect({
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0">
         <Command>
-          <CommandInput placeholder="Search framework..." />
+          <CommandInput placeholder="Tìm framework..." />
           <CommandList>
-            <CommandEmpty>No framework found.</CommandEmpty>
+            <CommandEmpty>Không có dữ liệu.</CommandEmpty>
             <CommandGroup>
               {options.map((o) => (
                 <CommandItem

@@ -8,7 +8,6 @@ namespace PM.Application.Issues.Commands.CreateIssue;
 
 public record CreateIssueCommand(
     Guid ProjectId,
-    string Code,
     string Title,
     string Description,
     Guid AssigneeId,
